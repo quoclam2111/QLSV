@@ -10,7 +10,7 @@
         android:supportsRtl="true"
         android:theme="@style/AppTheme">
 
-        <!-- Main Activity -->
+        <!-- Main Activity - Màn hình chính với menu -->
         <activity
             android:name=".ui.MainActivity"
             android:exported="true"
@@ -21,17 +21,58 @@
             </intent-filter>
         </activity>
 
-        <!-- Add Student Activity -->
+        <activity
+            android:name=".ui.QuanLySinhVien"
+            android:label="Danh Sách Sinh Viên"
+            android:parentActivityName=".ui.MainActivity"
+            android:exported="false" />
+
+        <!-- Add Student -->
         <activity
             android:name=".ui.AddSinhVienActivity"
             android:label="Thêm Sinh Viên"
-            android:parentActivityName=".ui.MainActivity" />
+            android:parentActivityName=".ui.QuanLySinhVien"
+            android:exported="false" />
 
-        <!-- Edit Student Activity -->
+        <!-- Edit Student -->
         <activity
             android:name=".ui.EditSinhVienActivity"
             android:label="Cập Nhật Sinh Viên"
+            android:parentActivityName=".ui.QuanLySinhVien"
+            android:exported="false" />
+
+        <!-- Các Activity khác (thêm sau khi tạo) -->
+        <!--
+        <activity
+            android:name=".ui.AttendanceActivity"
+            android:label="Điểm Danh"
             android:parentActivityName=".ui.MainActivity" />
+
+        <activity
+            android:name=".ui.ClassManagementActivity"
+            android:label="Quản Lý Lớp"
+            android:parentActivityName=".ui.MainActivity" />
+
+        <activity
+            android:name=".ui.SubjectManagementActivity"
+            android:label="Quản Lý Môn Học"
+            android:parentActivityName=". ui.MainActivity" />
+
+        <activity
+            android:name=". ui.TeacherManagementActivity"
+            android:label="Quản Lý Giảng Viên"
+            android:parentActivityName=".ui.MainActivity" />
+
+        <activity
+            android:name=".ui.AccountManagementActivity"
+            android:label="Quản Lý Tài Khoản"
+            android:parentActivityName=".ui.MainActivity" />
+
+        <activity
+            android:name=".ui.StatisticsActivity"
+            android:label="Thống Kê Báo Cáo"
+            android:parentActivityName=". ui.MainActivity" />
+        -->
 
     </application>
 

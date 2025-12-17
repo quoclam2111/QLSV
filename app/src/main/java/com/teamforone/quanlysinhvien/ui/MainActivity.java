@@ -1,232 +1,141 @@
 package com.teamforone.quanlysinhvien.ui;
 
-import android.content.DialogInterface;
 import android.content.Intent;
 import android.os.Bundle;
-import android.text.Editable;
-import android.text.TextWatcher;
-import android.view.View;
-import android.widget.AdapterView;
-import android.widget.ArrayAdapter;
-import android.widget.Button;
-import android.widget.EditText;
-import android.widget.Spinner;
 import android.widget.TextView;
 import android.widget.Toast;
+
+import androidx.activity.OnBackPressedCallback;
 import androidx.appcompat.app.AlertDialog;
-import androidx.appcompat.app.AppCompatActivity;
-import androidx.appcompat.widget.Toolbar;
-import androidx.recyclerview.widget.LinearLayoutManager;
-import androidx.recyclerview.widget.RecyclerView;
-import com.google.android.material.floatingactionbutton.FloatingActionButton;
+import androidx.appcompat.app. AppCompatActivity;
+import androidx.cardview.widget.CardView;
+
 import com.teamforone.quanlysinhvien.R;
-import com.teamforone.quanlysinhvien.domain.model.SinhVien;
-import com.teamforone.quanlysinhvien.service.SinhVienService;
-import com.teamforone.quanlysinhvien.util.AppLogger;
-import com.teamforone.quanlysinhvien.util.Constants;
+import com.teamforone.quanlysinhvien.ui.QuanLySinhVien;
 
-import java.util.ArrayList;
-import java.util.List;
+public class MainActivity extends AppCompatActivity {
 
-public class MainActivity extends AppCompatActivity implements SinhVienAdapter.OnItemClickListener{
-
-    private RecyclerView recyclerView;
-    private SinhVienAdapter adapter;
-    private SinhVienService sinhVienService;
-    private List<SinhVien> sinhVienList;
-
-    private EditText etSearch;
-    private Spinner spinnerLop;
-    private TextView tvEmpty;
-    private Button btnSearch, btnResetFilter;
-    private FloatingActionButton fabAdd;
-
-    private String currentFilter = Constants.FILTER_ALL;
+    private CardView cardStudentManagement, cardAttendance, cardClassManagement;
+    private CardView cardSubjectManagement, cardTeacherManagement, cardAccountManagement;
+    private CardView cardStatistics, cardLogout;
+    private TextView tvWelcome;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
-        setContentView(R.layout.quanlysinhvien);
+        setContentView(R.layout.activity_main);
 
-        AppLogger.d(Constants.LOG_TAG_UI, "MainActivity created");
-
-        setupToolbar();
+        // Khởi tạo views
         initViews();
-        initService();
-        setupRecyclerView();
-        setupSpinner();
-        setupListeners();
-        loadData();
-    }
 
-    private void setupToolbar() {
-        Toolbar toolbar = findViewById(R.id.toolbar);
-        setSupportActionBar(toolbar);
+        // Lấy thông tin người dùng (nếu có từ Intent hoặc SharedPreferences)
+        String username = getIntent().getStringExtra("username");
+        if (username != null && !username.isEmpty()) {
+            tvWelcome.setText("Xin chào, " + username);
+        }
+
+        // Thiết lập sự kiện click cho các card
+        setupClickListeners();
+        getOnBackPressedDispatcher().addCallback(this,
+                new OnBackPressedCallback(true) {
+                    @Override
+                    public void handleOnBackPressed() {
+                        showExitDialog();
+                    }
+                });
     }
 
     private void initViews() {
-        recyclerView = findViewById(R.id.recyclerView);
-        etSearch = findViewById(R.id.etSearch);
-        spinnerLop = findViewById(R.id.spinnerLop);
-        tvEmpty = findViewById(R.id.tvEmpty);
-        btnSearch = findViewById(R.id.btnSearch);
-        btnResetFilter = findViewById(R.id.btnResetFilter);
-        fabAdd = findViewById(R.id.fabAdd);
+        tvWelcome = findViewById(R. id.tvWelcome);
+        cardStudentManagement = findViewById(R.id.cardStudentManagement);
+        cardAttendance = findViewById(R.id. cardAttendance);
+        cardClassManagement = findViewById(R. id.cardClassManagement);
+        cardSubjectManagement = findViewById(R.id.cardSubjectManagement);
+        cardTeacherManagement = findViewById(R. id.cardTeacherManagement);
+        cardAccountManagement = findViewById(R.id.cardAccountManagement);
+        cardStatistics = findViewById(R.id.cardStatistics);
+        cardLogout = findViewById(R.id.cardLogout);
     }
 
-    private void initService() {
-        sinhVienService = SinhVienService.getInstance(this);
-    }
-
-    private void setupRecyclerView() {
-        recyclerView.setLayoutManager(new LinearLayoutManager(this));
-        sinhVienList = new ArrayList<>();
-        adapter = new SinhVienAdapter(sinhVienList, this);
-        recyclerView.setAdapter(adapter);
-    }
-
-    private void setupSpinner() {
-        List<String> lopList = sinhVienService.getAllLopNames();
-        ArrayAdapter<String> spinnerAdapter = new ArrayAdapter<>(
-                this,
-                android.R.layout.simple_spinner_item,
-                lopList
-        );
-        spinnerAdapter.setDropDownViewResource(android.R.layout.simple_spinner_dropdown_item);
-        spinnerLop.setAdapter(spinnerAdapter);
-    }
-
-    private void setupListeners() {
-        fabAdd.setOnClickListener(v -> {
-            Intent intent = new Intent(MainActivity.this, AddSinhVienActivity.class);
+    private void setupClickListeners() {
+        // Quản lý sinh viên
+        cardStudentManagement.setOnClickListener(v -> {
+            Intent intent = new Intent(MainActivity.this, QuanLySinhVien.class);
             startActivity(intent);
         });
 
-        btnSearch.setOnClickListener(v -> performSearch());
+//        // Điểm danh
+//        cardAttendance. setOnClickListener(v -> {
+//            Intent intent = new Intent(MainActivity.this, AttendanceActivity.class);
+//            startActivity(intent);
+//        });
+//
+//        // Quản lý lớp
+//        cardClassManagement.setOnClickListener(v -> {
+//            Intent intent = new Intent(MainActivity.this, ClassManagementActivity.class);
+//            startActivity(intent);
+//        });
+//
+//        // Quản lý môn học
+//        cardSubjectManagement. setOnClickListener(v -> {
+//            Intent intent = new Intent(MainActivity.this, SubjectManagementActivity.class);
+//            startActivity(intent);
+//        });
+//
+//        // Quản lý giảng viên
+//        cardTeacherManagement.setOnClickListener(v -> {
+//            Intent intent = new Intent(MainActivity.this, TeacherManagementActivity.class);
+//            startActivity(intent);
+//        });
+//
+//        // Quản lý tài khoản - phân quyền
+//        cardAccountManagement.setOnClickListener(v -> {
+//            Intent intent = new Intent(MainActivity.this, AccountManagementActivity.class);
+//            startActivity(intent);
+//        });
+//
+//        // Thống kê báo cáo
+//        cardStatistics.setOnClickListener(v -> {
+//            Intent intent = new Intent(MainActivity.this, StatisticsActivity.class);
+//            startActivity(intent);
+//        });
 
-        etSearch.addTextChangedListener(new TextWatcher() {
-            @Override
-            public void beforeTextChanged(CharSequence s, int start, int count, int after) {}
-
-            @Override
-            public void onTextChanged(CharSequence s, int start, int before, int count) {
-                if (s.toString().isEmpty()) {
-                    loadData();
-                }
-            }
-
-            @Override
-            public void afterTextChanged(Editable s) {}
+        // Đăng xuất
+        cardLogout.setOnClickListener(v -> {
+            // Hiển thị dialog xác nhận đăng xuất
+            showLogoutDialog();
         });
-
-        spinnerLop.setOnItemSelectedListener(new AdapterView.OnItemSelectedListener() {
-            @Override
-            public void onItemSelected(AdapterView<?> parent, View view, int position, long id) {
-                String selected = parent.getItemAtPosition(position).toString();
-                currentFilter = selected;
-                applyFilter();
-            }
-
-            @Override
-            public void onNothingSelected(AdapterView<?> parent) {}
-        });
-
-        btnResetFilter.setOnClickListener(v -> resetFilters());
     }
 
-    private void loadData() {
-        AppLogger.d(Constants.LOG_TAG_UI, "Loading all data");
-        sinhVienList = sinhVienService.getAllSinhVien();
-        updateUI();
-    }
+    private void showLogoutDialog() {
+        new androidx.appcompat.app.AlertDialog.Builder(this)
+                .setTitle("Đăng xuất")
+                .setMessage("Bạn có chắc chắn muốn đăng xuất? ")
+                .setPositiveButton("Có", (dialog, which) -> {
+                    // Xóa thông tin đăng nhập (SharedPreferences)
+                    // SharedPreferences prefs = getSharedPreferences("UserPrefs", MODE_PRIVATE);
+                    // prefs.edit().clear().apply();
 
-    private void performSearch() {
-        String keyword = etSearch.getText().toString().trim();
-        if (!keyword.isEmpty()) {
-            AppLogger.d(Constants.LOG_TAG_UI, "Performing search: " + keyword);
-            sinhVienList = sinhVienService.searchSinhVien(keyword);
-            updateUI();
-        } else {
-            Toast.makeText(this, "Vui lòng nhập từ khóa tìm kiếm", Toast.LENGTH_SHORT).show();
-        }
-    }
+                    Toast.makeText(MainActivity.this, "Đã đăng xuất", Toast.LENGTH_SHORT).show();
 
-    private void applyFilter() {
-        if (currentFilter.equals(Constants.FILTER_ALL)) {
-            loadData();
-        } else {
-            String maLop = currentFilter.split(" - ")[0];
-            AppLogger.d(Constants.LOG_TAG_UI, "Applying filter: " + maLop);
-            sinhVienList = sinhVienService.filterByLop(maLop);
-            updateUI();
-        }
-    }
-
-    private void resetFilters() {
-        spinnerLop.setSelection(0);
-        etSearch.setText("");
-        loadData();
-        Toast.makeText(this, "Đã reset bộ lọc", Toast.LENGTH_SHORT).show();
-    }
-
-    private void updateUI() {
-        if (sinhVienList.isEmpty()) {
-            recyclerView.setVisibility(View.GONE);
-            tvEmpty.setVisibility(View.VISIBLE);
-        } else {
-            recyclerView.setVisibility(View.VISIBLE);
-            tvEmpty.setVisibility(View.GONE);
-        }
-        adapter.updateList(sinhVienList);
-        AppLogger.d(Constants.LOG_TAG_UI, "UI updated with " + sinhVienList.size() + " items");
-    }
-
-    @Override
-    public void onEditClick(SinhVien sinhVien) {
-        AppLogger.d(Constants.LOG_TAG_UI, "Edit clicked for: " + sinhVien.getMaSV());
-        Intent intent = new Intent(MainActivity.this, EditSinhVienActivity.class);
-        intent.putExtra(Constants.EXTRA_MA_SV, sinhVien.getMaSV());
-        intent.putExtra(Constants.EXTRA_HO_TEN, sinhVien.getHoTen());
-        intent.putExtra(Constants.EXTRA_NGAY_SINH, sinhVien.getNgaySinh());
-        intent.putExtra(Constants.EXTRA_GIOI_TINH, sinhVien.getGioiTinh());
-        intent.putExtra(Constants.EXTRA_DIA_CHI, sinhVien.getDiaChi());
-        intent.putExtra(Constants.EXTRA_MA_LOP, sinhVien.getMaLop());
-        startActivity(intent);
-    }
-
-    @Override
-    public void onDeleteClick(SinhVien sinhVien) {
-        showDeleteConfirmDialog(sinhVien);
-    }
-
-    private void showDeleteConfirmDialog(SinhVien sinhVien) {
-        new AlertDialog.Builder(this)
-                .setTitle("Xác nhận xóa")
-                .setMessage("Bạn có chắc chắn muốn xóa sinh viên " + sinhVien.getHoTen() +
-                        " (Mã: " + sinhVien.getMaSV() + ") không?")
-                .setPositiveButton("Xóa", new DialogInterface.OnClickListener() {
-                    @Override
-                    public void onClick(DialogInterface dialog, int which) {
-                        deleteSinhVien(sinhVien.getMaSV());
-                    }
+//                    // Chuyển về màn hình đăng nhập
+//                    Intent intent = new Intent(MainActivity.this, LoginActivity.class);
+//                    intent.setFlags(Intent.FLAG_ACTIVITY_NEW_TASK | Intent. FLAG_ACTIVITY_CLEAR_TASK);
+//                    startActivity(intent);
+//                    finish();
                 })
-                .setNegativeButton("Hủy", null)
-                .setIcon(android.R.drawable.ic_dialog_alert)
+                .setNegativeButton("Không", null)
                 .show();
     }
 
-    private void deleteSinhVien(String maSV) {
-        if (sinhVienService.deleteSinhVien(maSV)) {
-            Toast.makeText(this, Constants.MSG_DELETE_SUCCESS, Toast.LENGTH_SHORT).show();
-            loadData();
-        } else {
-            Toast.makeText(this, Constants.MSG_DELETE_FAILED, Toast.LENGTH_SHORT).show();
-        }
-    }
-
-    @Override
-    protected void onResume() {
-        super.onResume();
-        loadData();
+    private void showExitDialog() {
+        new AlertDialog.Builder(this)
+                .setTitle("Thoát ứng dụng")
+                .setMessage("Bạn có muốn thoát ứng dụng?")
+                .setPositiveButton("Có", (dialog, which) -> {
+                    finishAffinity(); // Đóng toàn bộ Activity
+                })
+                .setNegativeButton("Không", null)
+                .show();
     }
 }

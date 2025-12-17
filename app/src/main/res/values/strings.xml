@@ -1,3 +1,12 @@
 <resources>
-    <string name="app_name">Quản Lý SinhVien</string>
+    <string name="app_name">Quản Lý Sinh Viên</string>
+    <string name="app_logo">Logo ứng dụng</string>
+    <string name="student_management">Quản lý sinh viên</string>
+    <string name="attendance">Điểm danh</string>
+    <string name="class_management">Quản lý lớp</string>
+    <string name="subject_management">Quản lý môn học</string>
+    <string name="teacher_management">Quản lý giảng viên</string>
+    <string name="account_management">Quản lý tài khoản</string>
+    <string name="statistics">Thống kê báo cáo</string>
+    <string name="logout">Đăng xuất</string>
 </resources>

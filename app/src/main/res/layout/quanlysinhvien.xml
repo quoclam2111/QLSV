@@ -109,14 +109,35 @@
         android:gravity="center"
         android:visibility="gone" />
 
-    <!-- Floating Action Button -->
-    <com.google.android.material.floatingactionbutton.FloatingActionButton
-        android:id="@+id/fabAdd"
-        android:layout_width="wrap_content"
+
+    <FrameLayout
+        android:layout_width="match_parent"
         android:layout_height="wrap_content"
-        android:layout_gravity="end|bottom"
-        android:layout_margin="16dp"
-        android:src="@android:drawable/ic_input_add"
-        app:tint="@android:color/white"
-        app:backgroundTint="@color/colorPrimary" />
+        android:padding="16dp">
+
+        <!-- FAB Home (trái) -->
+        <com.google.android.material.floatingactionbutton.FloatingActionButton
+            android:id="@+id/fabHome"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_gravity="start|bottom"
+            android:src="@android:drawable/ic_menu_view"
+            app:tint="@android:color/white"
+            app:backgroundTint="@color/colorAccent"
+            app:elevation="0dp"
+            app:pressedTranslationZ="0dp"/>
+
+        <!-- FAB Add (phải) -->
+        <com.google.android.material.floatingactionbutton.FloatingActionButton
+            android:id="@+id/fabAdd"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_gravity="end|bottom"
+            android:src="@android:drawable/ic_input_add"
+            app:tint="@android:color/white"
+            app:backgroundTint="@color/colorPrimary"
+            app:elevation="0dp"
+            app:pressedTranslationZ="0dp"/>
+
+    </FrameLayout>
 </LinearLayout>
